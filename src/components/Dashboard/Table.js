@@ -5,7 +5,7 @@ const Table = ({ students, handleEdit, handleDelete }) => {
   if (!students || students.length === 0) {
     return (
       <div className="contain-table">
-        <p>students</p>
+        <p>No students</p>
       </div>
     );
   }
@@ -19,60 +19,50 @@ const Table = ({ students, handleEdit, handleDelete }) => {
   return (
     <div className="contain-table">
       <table className="striped-table">
-      <thead>
+        <thead>
           <tr>
-          <th>studentId</th>
-          <th>studentName</th>
-          <th>Date of Birth</th>
-          <th>Gender</th>
-          <th>Father Name</th>
-          <th>Mother Name</th>
-          <th>Email ID</th>
-          <th>Phone Number</th>
-          <th>Address</th>
-          <th>Actions</th>
-
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Date of Birth</th>
+            <th>Gender</th>
+            <th>Father Name</th>
+            <th>Mother Name</th>
+            <th>Email ID</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {students.length > 0 ? (
-            students.map((student, i) => (
-              <tr key={student.id}>
-                <td>{i + 1}</td>
-                <td>{student.studentId}</td>
-           <td>{student.studentName}</td>
-            <td>{student.dateOfBirth}</td>
-            <td>{student.gender}</td>
-            <td>{student.fatherName}</td>
-            <td>{student.motherName}</td>
-            <td>{student.emailId}</td>
-            <td>{student.phoneNumber}</td>
-            <td>{student.address}</td>
-
-
-                <td className="text-right">
-                  <button
-                    onClick={() => handleEdit(student.id)}
-                    className="button muted-button"
-                  >
-                    Edit
-                  </button>
-                </td>
-                <td className="text-left">
-                  <button
-                    onClick={() => handleDelete(student.id)}
-                    className="button muted-button"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={7}>No students</td>
+          {studentsWithIds.map((student) => (
+            <tr key={student.id}>
+              <td>{student.id}</td>
+              <td>{student.studentName}</td>
+              <td>{student.dateOfBirth}</td>
+              <td>{student.gender}</td>
+              <td>{student.fatherName}</td>
+              <td>{student.motherName}</td>
+              <td>{student.emailId}</td>
+              <td>{student.phoneNumber}</td>
+              <td>{student.address}</td>
+              <td className="text-right">
+                <button
+                  onClick={() => handleEdit(student.id)}
+                  className="button muted-button"
+                >
+                  Edit
+                </button>
+              </td>
+              <td className="text-left">
+                <button
+                  onClick={() => handleDelete(student.id)}
+                  className="button muted-button"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     </div>

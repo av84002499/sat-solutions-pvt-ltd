@@ -16,6 +16,15 @@
     padding: 5px;
   }
   
-  .container{
-    grid-row: 1 / span 2;
-  }
+  .containers{
+    max-width: 200px;
+    margin:  0 auto;
+    padding: 40px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    text-align: center;
+
+
+
+}

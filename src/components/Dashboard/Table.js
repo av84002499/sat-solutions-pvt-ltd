@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Table = ({ students, handleEdit, handleDelete }) => {
-  // Check if students is undefined or an empty array
-  if (!students || students.length === 0) {
-    return (
-      <div className="contain-table">
-        <p>No students</p>
-      </div>
-    );
-  }
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Function to handle changes in the search bar input
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   // Function to render the table rows
   const renderTableRows = () => {
@@ -45,6 +43,14 @@ const Table = ({ students, handleEdit, handleDelete }) => {
 
   return (
     <div className="contain-table">
+      {/* Add the search bar input outside of the table */}
+      <input
+        type="text"
+        placeholder="Search by Student Name"
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+
       <table className="striped-table">
         <thead>
           <tr>

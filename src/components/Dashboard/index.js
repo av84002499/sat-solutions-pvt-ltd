@@ -16,17 +16,19 @@ const Dashboard = ({ setIsAuthenticated }) => {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('students_data'));
-    if (data !== null && Object.keys(data).length !== 0) setStudents(data);
+    if (data) {
+      setStudents(data);
+    }
   }, []);
 
-  const handleEdit = id => {
-    const [student] = students.filter(student => student.id === id);
+  const handleEdit = (id) => {
+    const student = students.find((student) => student.id === id);
 
     setSelectedStudent(student);
     setIsEditing(true);
   };
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     Swal.fire({
       icon: 'warning',
       title: 'Are you sure?',
@@ -34,19 +36,19 @@ const Dashboard = ({ setIsAuthenticated }) => {
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, cancel!',
-    }).then(result => {
-      if (result.value) {
-        const [student] = students.filter(student => student.id === id);
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const studentToDelete = students.find((student) => student.id === id);
 
         Swal.fire({
           icon: 'success',
           title: 'Deleted!',
-          text: `${student.firstName} ${student.lastName}'s data has been deleted.`,
+          text: `${studentToDelete.firstName} ${studentToDelete.lastName}'s data has been deleted.`,
           showConfirmButton: false,
           timer: 1500,
         });
 
-        const studentsCopy = students.filter(student => student.id !== id);
+        const studentsCopy = students.filter((student) => student.id !== id);
         localStorage.setItem('students_data', JSON.stringify(studentsCopy));
         setStudents(studentsCopy);
       }
@@ -57,31 +59,13 @@ const Dashboard = ({ setIsAuthenticated }) => {
     <div className="container">
       {!isAdding && !isEditing && (
         <>
-          <Header
-            setIsAdding={setIsAdding}
-            setIsAuthenticated={setIsAuthenticated}
-          />
-          <Table
-            student={students}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-          />
+          <Header setIsAdding={setIsAdding} setIsAuthenticated={setIsAuthenticated} />
+          <Table students={students} handleEdit={handleEdit} handleDelete={handleDelete} />
         </>
       )}
-      {isAdding && (
-        <Add
-        students={students}
-          setStudents={setStudents}
-          setIsAdding={setIsAdding}
-        />
-      )}
+      {isAdding && <Add students={students} setStudents={setStudents} setIsAdding={setIsAdding} />}
       {isEditing && (
-        <Edit
-        students={students}
-          selectedStudent={selectedStudent}
-          setStudents={setStudents}
-          setIsEditing={setIsEditing}
-        />
+        <Edit students={students} selectedStudent={selectedStudent} setStudents={setStudents} setIsEditing={setIsEditing} />
       )}
     </div>
   );

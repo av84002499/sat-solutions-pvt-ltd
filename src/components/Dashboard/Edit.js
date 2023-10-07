@@ -1,32 +1,58 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 
-const Edit = ({ students, selectedStudent, setstudents, setIsEditing }) => {
-  const id = selectedStudent.id;
+const Edit = ({ students, selectedStudent, setStudents, setIsEditing }) => {
+  const [studentData, setStudentData] = useState({
+    studentName: selectedStudent.studentName,
+    dateOfBirth: selectedStudent.dateOfBirth,
+    gender: selectedStudent.gender,
+    fatherName: selectedStudent.fatherName,
+    motherName: selectedStudent.motherName,
+    emailId: selectedStudent.emailId,
+    phoneNumber: selectedStudent.phoneNumber,
+    address: selectedStudent.address,
+  });
 
-  const [studentName, setStudentName] = useState(selectedStudent.studentName);
-  const [dateOfBirth, setDateOfBirth] = useState(selectedStudent.dateOfBirth);
-  const [gender, setGender] = useState(selectedStudent.gender);
-  const [fatherName, setFatherName] = useState(selectedStudent.fatherName);
-  const [motherName, setMotherName] = useState(selectedStudent.motherName);
-  const [emailId, setEmailId] = useState(selectedStudent.emailId);
-  const [phoneNumber, setPhoneNumber] = useState(selectedStudent.phoneNumber);
-  const [address, setAddress] = useState(selectedStudent.address);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setStudentData({ ...studentData, [name]: value });
+  };
 
-  const handleUpdate = e => {
+  const handleUpdate = (e) => {
     e.preventDefault();
 
-    if (!studentName || !dateOfBirth || !gender || !fatherName || !motherName || !emailId || !phoneNumber || !address) {
-      return Swal.fire({
+    const {
+      studentName,
+      dateOfBirth,
+      gender,
+      fatherName,
+      motherName,
+      emailId,
+      phoneNumber,
+      address,
+    } = studentData;
+
+    if (
+      !studentName ||
+      !dateOfBirth ||
+      !gender ||
+      !fatherName ||
+      !motherName ||
+      !emailId ||
+      !phoneNumber ||
+      !address
+    ) {
+      Swal.fire({
         icon: 'error',
         title: 'Error!',
         text: 'All fields are required.',
         showConfirmButton: true,
       });
+      return;
     }
 
-    const student = {
-      id,
+    const updatedStudent = {
+      ...selectedStudent,
       studentName,
       dateOfBirth,
       gender,
@@ -37,21 +63,18 @@ const Edit = ({ students, selectedStudent, setstudents, setIsEditing }) => {
       address,
     };
 
-    for (let i = 0; i < students.length; i++) {
-      if (students[i].id === id) {
-        students.splice(i, 1, student);
-        break;
-      }
-    }
+    const updatedStudents = students.map((student) =>
+      student.id === selectedStudent.id ? updatedStudent : student
+    );
 
-    localStorage.setItem('students_data', JSON.stringify(students));
-    setstudents(students);
+    localStorage.setItem('students_data', JSON.stringify(updatedStudents));
+    setStudents(updatedStudents);
     setIsEditing(false);
 
     Swal.fire({
       icon: 'success',
       title: 'Updated!',
-      text: `${student.studentName} ${student.dateOfBirth}'s data has been updated.`,
+      text: `${studentName}'s data has been updated.`,
       showConfirmButton: false,
       timer: 1500,
     });
@@ -60,71 +83,72 @@ const Edit = ({ students, selectedStudent, setstudents, setIsEditing }) => {
   return (
     <div className="small-container">
       <form onSubmit={handleUpdate}>
-        <h1>Edit student</h1>
-        <label htmlFor="studentName">StudentName</label>
+        <h1>Edit Student</h1>
+        <label htmlFor="studentName">Student Name</label>
         <input
           id="studentName"
           type="text"
           name="studentName"
-          value={studentName}
-          onChange={e => setStudentName(e.target.value)}
+          value={studentData.studentName}
+          onChange={handleChange}
         />
-       <label htmlFor="dateOfBirth">DateOfBirth</label>
+        <label htmlFor="dateOfBirth">Date of Birth</label>
         <input
           id="dateOfBirth"
           type="text"
           name="dateOfBirth"
-          value={dateOfBirth}
-          onChange={e => setDateOfBirth(e.target.value)}
+          value={studentData.dateOfBirth}
+          onChange={handleChange}
         />
         <label htmlFor="gender">Gender</label>
         <input
           id="gender"
           type="text"
           name="gender"
-          value={gender}
-          onChange={e => setGender(e.target.value)}
+          value={studentData.gender}
+          onChange={handleChange}
         />
-        <label htmlFor="fatherName">FatherName ($)</label>
+        <label htmlFor="fatherName">Father's Name</label>
         <input
           id="fatherName"
           type="text"
           name="fatherName"
-          value={fatherName}
-          onChange={e => setFatherName(e.target.value)}
+          value={studentData.fatherName}
+          onChange={handleChange}
         />
-        <label htmlFor="motherName">MotherName</label>
+        <label htmlFor="motherName">Mother's Name</label>
         <input
           id="motherName"
           type="text"
           name="motherName"
-          value={motherName}
-          onChange={e => setMotherName(e.target.value)}
+          value={studentData.motherName}
+          onChange={handleChange}
         />
-         <label htmlFor="emailId">EmailId</label>
+        <label htmlFor="emailId">Email</label>
         <input
           id="emailId"
           type="email"
           name="emailId"
-          value={emailId}
-          onChange={e => setEmailId(e.target.value)}
+          value={studentData.emailId}
+          onChange={handleChange}
         />
-         <label htmlFor="phoneNumber">PhoneNumber</label>
+        <label htmlFor="phoneNumber">Phone Number</label>
         <input
           id="phoneNumber"
           type="number"
           name="phoneNumber"
-          value={phoneNumber}
-          onChange={e => setPhoneNumber(e.target.value)}
+          value={studentData.phoneNumber}
+          onChange={handleChange}
         />
-         <label htmlFor="address">Address</label>
+        <label htmlFor="address">Address</label>
         <input
           id="address"
           type="text"
           name="address"
-          value={address}
-          onChange={e => setAddress(e.target.value)}
+          value={studentData.address}
+          onChange={handleChange}
         />
+
         <div style={{ marginTop: '30px' }}>
           <input type="submit" value="Update" />
           <input

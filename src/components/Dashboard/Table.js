@@ -10,11 +10,38 @@ const Table = ({ students, handleEdit, handleDelete }) => {
     );
   }
 
-  // Create a new array with updated student IDs
-  const studentsWithIds = students.map((student, i) => ({
-    ...student,
-    id: i + 1,
-  }));
+  // Function to render the table rows
+  const renderTableRows = () => {
+    return students.map((student, index) => (
+      <tr key={student.id}>
+        <td>{index + 1}</td>
+        <td>{student.studentName}</td>
+        <td>{student.dateOfBirth}</td>
+        <td>{student.gender}</td>
+        <td>{student.fatherName}</td>
+        <td>{student.motherName}</td>
+        <td>{student.emailId}</td>
+        <td>{student.phoneNumber}</td>
+        <td>{student.address}</td>
+        <td className="text-right">
+          <button
+            onClick={() => handleEdit(student.id)}
+            className="button muted-button"
+          >
+            Edit
+          </button>
+        </td>
+        <td className="text-left">
+          <button
+            onClick={() => handleDelete(student.id)}
+            className="button muted-button"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    ));
+  };
 
   return (
     <div className="contain-table">
@@ -33,37 +60,7 @@ const Table = ({ students, handleEdit, handleDelete }) => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {studentsWithIds.map((student) => (
-            <tr key={student.id}>
-              <td>{student.id}</td>
-              <td>{student.studentName}</td>
-              <td>{student.dateOfBirth}</td>
-              <td>{student.gender}</td>
-              <td>{student.fatherName}</td>
-              <td>{student.motherName}</td>
-              <td>{student.emailId}</td>
-              <td>{student.phoneNumber}</td>
-              <td>{student.address}</td>
-              <td className="text-right">
-                <button
-                  onClick={() => handleEdit(student.id)}
-                  className="button muted-button"
-                >
-                  Edit
-                </button>
-              </td>
-              <td className="text-left">
-                <button
-                  onClick={() => handleDelete(student.id)}
-                  className="button muted-button"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{renderTableRows()}</tbody>
       </table>
     </div>
   );

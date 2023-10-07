@@ -7,18 +7,19 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    setIsAuthenticated(JSON.parse(localStorage.getItem('is_authenticated')));
+    const storedIsAuthenticated = JSON.parse(localStorage.getItem('is_authenticated'));
+    setIsAuthenticated(storedIsAuthenticated);
   }, []);
 
-  return (
-    <>
-      {isAuthenticated ? (
-        <Dashboard setIsAuthenticated={setIsAuthenticated} />
-      ) : (
-        <Login setIsAuthenticated={setIsAuthenticated} />
-      )}
-    </>
-  );
+  const renderContent = () => {
+    if (isAuthenticated) {
+      return <Dashboard setIsAuthenticated={setIsAuthenticated} />;
+    } else {
+      return <Login setIsAuthenticated={setIsAuthenticated} />;
+    }
+  };
+
+  return <>{renderContent()}</>;
 };
 
 export default App;
